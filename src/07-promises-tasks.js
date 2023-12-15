@@ -29,12 +29,14 @@
  */
 function willYouMarryMe(isPositiveAnswer) {
   return new Promise((resolve, reject) => {
-    if (typeof isPositiveAnswer !== 'boolean') {
-      reject(new Error('Wrong parameter is passed! Ask her again.'));
-    } else if (isPositiveAnswer) {
-      resolve('Hooray!!! She said "Yes"!');
+    if (typeof isPositiveAnswer === 'boolean') {
+      if (isPositiveAnswer) {
+        resolve('Hooray!!! She said "Yes"!');
+      } else {
+        resolve('Oh no, she said "No".');
+      }
     } else {
-      resolve('Oh no, she said "No".');
+      reject(new Error('Wrong parameter is passed! Ask her again.'));
     }
   });
 }
@@ -98,19 +100,26 @@ function getFastestPromise(array) {
  *    });
  *
  */
-async function chainPromises(array, action) {
-  let result = null;
-  // eslint-disable-next-line no-restricted-syntax
-  for (const promise of array) {
-    try {
-      // eslint-disable-next-line no-await-in-loop
-      const value = await promise;
-      result = result === null ? value : action(result, value);
-    } catch (error) {
-      // Handle promise rejection if needed
-    }
-  }
-  return result;
+function chainPromises(array, action) {
+  let promiseChain = Promise.resolve();
+  let chainResult = null;
+
+  array.forEach((p) => {
+    promiseChain = promiseChain
+      .then(() => p)
+      .then((result) => {
+        if (chainResult === null) {
+          chainResult = result;
+        } else {
+          chainResult = action(chainResult, result);
+        }
+      })
+      .catch(() => {
+        //
+      });
+  });
+
+  return promiseChain.then(() => chainResult);
 }
 
 module.exports = {
