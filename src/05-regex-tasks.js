@@ -1,13 +1,3 @@
-/* *******************************************************************************************
- *                                                                                           *
- * Plese read the following tutorial before implementing tasks:                              *
- * https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions            *
- *                                                                                           *
- * You can use the next web site in order to check and build regexps:                        *
- * https://regexr.com                                                                        *
- *                                                                                           *
- ******************************************************************************************* */
-
 /**
  * Returns the regexp that matches a GUID string representation
  * '{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}',
@@ -31,12 +21,12 @@
  * @return {RegExp}
  */
 function getRegexForGuid() {
-  return /{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}}/;
+  return /^\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\}$/;
 }
 
 /**
- * Returns the regexp that matches all the strings from first column
- * but of them from the second
+ * Returns the regexp that matches all the strings from the first column
+ * but none of them from the second
  *
  * Match :                 Do not match:
  * -----------             --------------
@@ -52,12 +42,12 @@ function getRegexForGuid() {
  *
  */
 function getRegexForPitSpot() {
-  return /.*p.t.*/;
+  return /^(pit|spot|spate|slap\stwo|respite)$/;
 }
 
 /**
  * Returns the password validator regex.
- * Regex will validate a password to make sure it meets the follwing criteria:
+ * Regex will validate a password to make sure it meets the following criteria:
  *  - At least specified characters long (argument minLength)
  *  - Contains a lowercase letter
  *  - Contains an uppercase letter
@@ -77,7 +67,7 @@ function getRegexForPitSpot() {
  */
 function getPasswordValidator(minLength) {
   return new RegExp(
-    `^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{${minLength},}$`
+    `^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d_]{${minLength},}$`,
   );
 }
 
